@@ -1,25 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import './App.scss';
 
-const App: React.FC = () => {
+const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
+const Login:React.LazyExoticComponent<any> = React.lazy(() => import('./views/pages/login/login'));
+const DefaultLayout:React.LazyExoticComponent<any> = React.lazy(() => import('./containers/default-layout/default-layout'));
+
+const App:React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <React.Suspense fallback={loading()}>
+        <Switch>
+            <Route exact path="/login" name="Login Page" render={(props: any) => <Login {...props}/>} />
+            <Route path="/home" name="Home Page" render={(props: any) => <DefaultLayout {...props}/>} />
+        </Switch>
+      </React.Suspense>
+    </Router>
   );
 }
 
